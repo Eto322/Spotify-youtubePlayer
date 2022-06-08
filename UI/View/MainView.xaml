@@ -1,0 +1,262 @@
+﻿<Window x:Class="UI.View.MainView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:local="clr-namespace:UI.View"
+	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+	xmlns:viewModel="clr-namespace:UI.ViewModel"
+	mc:Ignorable="d"
+    Title="Spotify dlya bednih" Height="1080" Width="1900"
+    Style="{StaticResource MaterialDesignWindow}"
+    ResizeMode="NoResize"
+    DataContext="{Binding Source={StaticResource MainViewModule},Path=MainViewModel}">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="0.02*"></RowDefinition>
+            <RowDefinition Height="0.1*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <materialDesign:Card>
+            <TabControl SelectedIndex="{Binding SelectedTab}"
+    materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+    SnapsToDevicePixels="True"
+    Style="{StaticResource MaterialDesignNavigationRailTabControl}"
+    TabStripPlacement="Left">
+
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+          Width="auto"
+          Height="auto">
+                            <materialDesign:PackIcon
+            Width="24"
+            Height="24"
+            HorizontalAlignment="Center"
+            Kind="AccountMusic" />
+                            <TextBlock
+            HorizontalAlignment="Center"
+            Text="Artist" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel>
+                        <WrapPanel>
+                            <TextBox Width="1700" Text="{Binding SearchArtist}"></TextBox>
+                            <Button Width="90" Content="Find" Command="{Binding SearchArtistCommand}"></Button>
+                        </WrapPanel>
+
+                        <DataGrid Height="825" ItemsSource="{Binding ArtistApis}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" VerticalScrollBarVisibility="Visible">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="200" Header="Image">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{ Binding ArtistCover }" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Name" FontSize="25" Binding="{Binding name }" />
+
+                                <DataGridTemplateColumn  IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button  Content="Albums"  CommandParameter="{Binding id}" Command="{Binding DataContext.SearchAlbumByArtistCommand,RelativeSource=
+                                            {RelativeSource FindAncestor,AncestorType=Window}}"></Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+          Width="auto"
+          Height="auto">
+                            <materialDesign:PackIcon
+            Width="24"
+            Height="24"
+            HorizontalAlignment="Center"
+            Kind="Album" />
+                            <TextBlock
+            HorizontalAlignment="Center"
+            Text="Album" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel>
+                        <WrapPanel>
+                            <TextBox Width="1700" Text="{Binding SearchAlbum}"></TextBox>
+                            <Button Width="90" Content="Find" Command="{Binding SearchAlbumCommand}"></Button>
+                        </WrapPanel>
+
+                        <DataGrid Height="825" ItemsSource="{Binding AlbumApis}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" VerticalScrollBarVisibility="Visible">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="200" Header="Image">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{ Binding AlbumCover }" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="AlbumName" FontSize="25" Binding="{Binding name }" />
+                                <DataGridTextColumn Header="AlbumType" FontSize="25" Binding="{Binding album_type}" />
+                                <DataGridTextColumn Header="Total Tracks" FontSize="25"  Binding="{Binding total_tracks}" />
+                                <DataGridTextColumn Header="Total Tracks"  FontSize="25" Binding="{Binding total_tracks}" />
+                                <DataGridTextColumn Header="Artist" FontSize="25"  Binding="{Binding AllArtists}"></DataGridTextColumn>
+                                <DataGridTemplateColumn  IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button  Content="Tracks"  CommandParameter="{Binding id}" Command="{Binding DataContext.SearchTrackByAlbumCommand,RelativeSource=
+                                            {RelativeSource FindAncestor,AncestorType=Window}}"></Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel
+          Width="auto"
+          Height="auto">
+                            <materialDesign:PackIcon
+            Width="24"
+            Height="24"
+            HorizontalAlignment="Center"
+            Kind="Music" />
+                            <TextBlock
+            HorizontalAlignment="Center"
+            Text="Tracks" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <StackPanel>
+                        <WrapPanel>
+                            <TextBox Width="1414" Text="{Binding SearchTrack}"></TextBox>
+                            <Button Width="90" Content="Find" Command="{Binding SearchTrackCommand}"></Button>
+                            <Button Width="auto" Margin="5" Content="Select Download Location" Command="{Binding SelectDownloadLocation}"></Button>
+                        </WrapPanel>
+
+                        <DataGrid Height="825" ItemsSource="{Binding TrackApis}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" VerticalScrollBarVisibility="Visible">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="200" Header="Image">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{ Binding TrackCover}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="Name" Width="350" FontSize="25" Binding="{Binding name }" />
+                                <DataGridTextColumn Header="Album"   Width="auto"  FontSize="25" Binding="{Binding Album }" />
+                                <DataGridTextColumn Header="Artist"  Width="auto" FontSize="25" Binding="{Binding AllArtists }" />
+                                <DataGridTextColumn Header="Status" Width="auto" FontSize="25" Binding="{Binding Status }" />
+                                <DataGridTemplateColumn  IsReadOnly="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button  Content="Dowload"  CommandParameter="{Binding id}" Command="{Binding DataContext.DownloadTrackCommand,RelativeSource=
+                                            {RelativeSource FindAncestor,AncestorType=Window}}"></Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button
+                                                Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                                ToolTip="MaterialDesignIconButton"
+                                                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                                CommandParameter="{Binding id}"
+                                                Command="{Binding DataContext.PlayFromWebCommand,RelativeSource=
+                                                {RelativeSource FindAncestor,AncestorType=Window}}">
+                                                <materialDesign:PackIcon
+                                                    Kind="Play" />
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </materialDesign:Card>
+
+        <WrapPanel Grid.Row="2">
+            <Button
+                Style="{StaticResource MaterialDesignIconButton}"
+                ToolTip="MaterialDesignIconButton"
+               Command="{Binding ShuffleCommand}">
+                <materialDesign:PackIcon
+
+                    Kind="Shuffle" />
+            </Button>
+            <Button
+                Style="{StaticResource MaterialDesignIconButton}"
+                ToolTip="MaterialDesignIconButton"
+                Command="{Binding PreviousSongCommand}">
+                <materialDesign:PackIcon
+                    Kind="SkipPrevious" />
+            </Button>
+            <Button
+                Style="{StaticResource MaterialDesignIconButton}"
+                ToolTip="MaterialDesignIconButton"
+                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                Command="{Binding PauseCommand}">
+                <materialDesign:PackIcon
+                    Kind="Pause" />
+            </Button>
+            <Button
+                Style="{StaticResource MaterialDesignIconButton}"
+                ToolTip="MaterialDesignIconButton"
+                Command="{Binding NextSongCommand}">
+                <materialDesign:PackIcon
+                    Kind="SkipNext" />
+            </Button>
+
+            <Image Width="120" Height="92" Margin="500,0,0,0" Source="{Binding ThumbNailSong.ImageUri}"></Image>
+            <TextBox Width="398" Height="95" FontSize="20" IsReadOnly="True"  Text="{Binding ThumbNailSong.ThumbnailString}" />
+            <TextBlock Width="122" FontSize="20" TextAlignment="Center">
+                <TextBlock.Text>
+                    <Binding StringFormat="mm':'ss" Path="CurrenTimeSpan" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" />
+                </TextBlock.Text>
+            </TextBlock>
+            <materialDesign:PopupBox Margin="450,0,0,0"
+                PlacementMode="TopAndAlignCentres">
+                <materialDesign:PopupBox.ToggleContent>
+                    <materialDesign:PackIcon
+                        Height="50"
+                        Width="50"
+                        Foreground="{DynamicResource PrimaryHueMidBrush}">
+                        <materialDesign:PackIcon.Style>
+                            <Style TargetType="materialDesign:PackIcon">
+                                <Setter Property="Kind" Value="VolumeHigh" />
+                            </Style>
+                        </materialDesign:PackIcon.Style>
+                    </materialDesign:PackIcon>
+                </materialDesign:PopupBox.ToggleContent>
+
+                <Slider
+                    TickFrequency="2"
+                    Orientation="Vertical"
+                    Value="{Binding Volume, Mode=TwoWay}"
+                    Minimum="0"
+                    Maximum="100"
+                    Height="100"
+                    Margin="5" />
+            </materialDesign:PopupBox>
+        </WrapPanel>
+
+        <Slider
+
+            Grid.Row="1"
+            VerticalAlignment="Center"
+            Minimum="0"
+            Maximum="{Binding ThumbNailSong.length}"
+            Value="{Binding  CurrentLenght,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+    </Grid>
+</Window>
